@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  registler:
+    build: .
+    image: mattipaksula/registler
+    env_file:
+      - .env
+    volumes:
+      - ./app:/app
+    ports:
+      - 6000:5000

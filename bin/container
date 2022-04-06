@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+_echoerr() {
+  2>&1 echo "$@"
+}
+
+_err() {
+  _echoerr $@
+  exit 1
+}
+
+case $1 in
+  recreate)
+    while true; do
+      docker-compose up --build --force-recreate --timeout 0 --remove-orphans
+      sleep 1
+    done
+  ;;
+  shell)
+    while true; do
+      docker-compose exec registler sh
+      sleep 1
+    done
+  ;;
+  buildpush)
+    docker-compose build
+    docker-compose push
+  ;;
+  *)
+    _err "?"
+  ;;
+esac

@@ -6,7 +6,7 @@ _echoerr() {
 }
 
 _err() {
-  _echoerr $@
+  _echoerr "$*"
   exit 1
 }
 
@@ -26,6 +26,11 @@ case $1 in
   buildpush)
     docker-compose build
     docker-compose push
+  ;;
+  test)
+    docker pull alpine
+    docker tag localhost:6000/alpine
+    docker push localhost:6000/alpine
   ;;
   *)
     _err "?"

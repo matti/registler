@@ -13,6 +13,24 @@ export REGISTRY_STORAGE_S3_REGIONENDPOINT="s3.${REGION}.amazonaws.com"
 # otherwise load balanced instances fail (says logs if this is not set)
 export REGISTRY_HTTP_SECRET=abbacdabbacdacdc
 
+(
+  regctl registry set --tls disabled 127.0.0.1:5000
+
+  while true; do
+    nc -z 127.0.0.1 5000 && break
+    echo "waiting for 127.0.0.1:5000"
+    sleep 1
+  done
+
+  sleep 60
+
+  while true; do
+    ./cleanup.sh
+    echo "cleanup exited!"
+    sleep 1
+  done
+) &
+
 envsubst < /app/config.template.yml > /config.yml
 
 cat /config.yml

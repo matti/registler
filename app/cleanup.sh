@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-registry="127.0.0.1:5000"
-keep=${REGISTLER_KEEP:-3}
+registry="${REGISTLER_REGISTRY:-127.0.0.1:5000}"
+repositories="${REGISTLER_REPOSITORIES:-}"
+keep="${REGISTLER_KEEP:-10}"
 workingdir="/tmp/registler"
 
 function _err() {
@@ -13,9 +14,11 @@ function _err() {
 while true; do
   started_at=$SECONDS
 
-  if ! repositories=$(regctl repo ls $registry); then
-    _err "regctl repo ls $registry"
-    continue
+  if [[ "$repositories" == "" ]]; then
+    if ! repositories=$(regctl repo ls $registry); then
+      _err "regctl repo ls $registry"
+      continue
+    fi
   fi
 
   for repository in $repositories; do

@@ -2,7 +2,7 @@
 set -Eeuo pipefail
 
 registry="127.0.0.1:5000"
-keep=3
+keep=${REGISTLER_KEEP:-3}
 workingdir="/tmp/registler"
 
 function _err() {

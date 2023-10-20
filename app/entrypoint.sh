@@ -22,7 +22,8 @@ export REGISTRY_HTTP_SECRET=abbacdabbacdacdc
     sleep 1
   done
 
-  sleep 60
+  delay=$((RANDOM % 500 + 60))
+  sleep $delay
 
   while true; do
     ./cleanup.sh

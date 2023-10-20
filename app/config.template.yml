@@ -2,7 +2,7 @@ version: 0.1
 log:
   accesslog:
     disabled: true # todo
-  level: debug
+  level: info
   formatter: text
 storage:
   s3:

@@ -1,0 +1,5 @@
+{
+  "AccountTag": "${CLOUDFLARED_ACCOUNT_TAG}",
+  "TunnelID": "${CLOUDFLARED_TUNNEL_ID}",
+  "TunnelSecret": "${CLOUDFLARED_TUNNEL_SECRET}"
+}

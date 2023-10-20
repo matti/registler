@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -Eeuo pipefail
+set -eEuo pipefail
 
 registry="${REGISTLER_REGISTRY:-127.0.0.1:5000}"
 repositories="${REGISTLER_REPOSITORIES:-}"
@@ -32,6 +32,7 @@ while true; do
     fi
 
     for tag in $tags; do
+      echo "$repository:$tag"
       case "$tag" in
         cache|latest)
           continue

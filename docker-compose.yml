@@ -15,5 +15,6 @@ services:
       - .env
     volumes:
       - ./app:/app
+      - ./cloudflared.pem:/cloudflared.pem
     ports:
       - 6000:5000

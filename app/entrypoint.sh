@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -eEuo pipefail
 
 (
   exec harderdns -retry -tries 3 -stats 60 8.8.8.8:53 9.9.9.9:53 1.1.1.1:53
@@ -30,6 +30,18 @@ export REGISTRY_HTTP_SECRET=abbacdabbacdacdc
     sleep 1
   done
 ) &
+
+if [[ "${CLOUDFLARED_ACCOUNT_TAG:-}" != "" ]]
+then
+  envsubst < /app/cloudflared.template.json > /cloudflared.json
+  (
+    while true; do
+      cloudflared tunnel --config /app/cloudflared.yaml --origincert /app/cloudflared.pem run "$CLOUDFLARED_TUNNEL_ID" || true
+      echo "cloudflared exited!"
+      sleep 1
+    done
+  ) &
+fi
 
 envsubst < /app/config.template.yml > /config.yml
 

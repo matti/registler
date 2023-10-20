@@ -1,6 +1,5 @@
-credentials-file: /cloudflared.json
 originRequest:
-  connectTimeout: 10s
+  connectTimeout: 3s
 
 ingress:
   - service: http://localhost:5000

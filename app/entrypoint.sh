@@ -34,10 +34,15 @@ export REGISTRY_HTTP_SECRET=abbacdabbacdacdc
 
 if [[ "${CLOUDFLARED_ACCOUNT_TAG:-}" != "" ]]
 then
+  echo "$CLOUDFLARED_PEM" > /cloudflared.pem
   envsubst < /app/cloudflared.template.json > /cloudflared.json
   (
     while true; do
-      cloudflared tunnel --config /app/cloudflared.yaml --origincert /app/cloudflared.pem run "$CLOUDFLARED_TUNNEL_ID" || true
+      cloudflared tunnel \
+        --config /app/cloudflared.yaml \
+        --origincert /app/cloudflared.pem \
+        --credentials-file /cloudflared.json \
+        run "$CLOUDFLARED_TUNNEL_ID" || true
       echo "cloudflared exited!"
       sleep 1
     done

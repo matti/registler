@@ -71,7 +71,6 @@ then
   envsubst < /app/cloudflared_tunnel.template.json > "$HOME/.cloudflared/${CLOUDFLARED_TUNNEL_ID}.json"
 
   (
-    echo $BASHPID > /tmp/cloudflared_tunnel.pid
     healthcheck_url="http://127.0.0.1:5000"
     while true; do
       curl -sf "$healthcheck_url" && break
@@ -80,6 +79,7 @@ then
     done
     echo "registry healthy"
 
+    echo $BASHPID > /tmp/cloudflared_tunnel.pid
     exec cloudflared tunnel --no-autoupdate --metrics 0.0.0.0:9090 \
       run --url "http://127.0.0.1:5000" "$CLOUDFLARED_TUNNEL_ID"
   ) 2>&1 | sed -le "s#^#cloudflared tunnel: #;" &

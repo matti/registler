@@ -1,5 +1,0 @@
-originRequest:
-  connectTimeout: 3s
-
-ingress:
-  - service: http://localhost:5000

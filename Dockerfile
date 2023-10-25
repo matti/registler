@@ -5,7 +5,7 @@ FROM registry:2.8.1
 RUN apk add --no-cache \
   bash gettext \
   curl jq \
-  libcap
+  libcap sed
 
 COPY --from=mattipaksula/harderdns:sha-674b3ac /* /usr/local/bin
 RUN setcap CAP_NET_BIND_SERVICE=+eip /usr/local/bin/harderdns

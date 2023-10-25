@@ -3,6 +3,8 @@ set -eEuo pipefail
 
 _shutdown() {
   trap '' TERM INT
+  echo ""
+  echo "_shutdown"
 
   if [[ -f /tmp/cloudflared_tunnel.pid ]]; then
     cloudflared_tunnel_pid=$(cat /tmp/cloudflared_tunnel.pid)
@@ -13,9 +15,9 @@ _shutdown() {
   kill 0
   wait
 
-  exit 0
+  exit "$1"
 }
-trap _shutdown TERM INT
+trap '_shutdown 0' TERM INT
 
 _on_error() {
   trap '' ERR
@@ -69,6 +71,7 @@ then
   envsubst < /app/cloudflared_tunnel.template.json > "$HOME/.cloudflared/${CLOUDFLARED_TUNNEL_ID}.json"
 
   (
+    echo $BASHPID > /tmp/cloudflared_tunnel.pid
     healthcheck_url="http://127.0.0.1:5000"
     while true; do
       curl -sf "$healthcheck_url" && break
@@ -77,12 +80,13 @@ then
     done
     echo "registry healthy"
 
-    #exec cloudflared tunnel --no-autoupdate run --url "http://127.0.0.1:5000" "$CLOUDFLARED_TUNNEL_ID"
+    exec cloudflared tunnel --no-autoupdate --metrics 0.0.0.0:9090 \
+      run --url "http://127.0.0.1:5000" "$CLOUDFLARED_TUNNEL_ID"
   ) 2>&1 | sed -le "s#^#cloudflared tunnel: #;" &
-  cloudflared_tunnel_pid=$!
-  echo "$cloudflared_tunnel_pid" >/tmp/cloudflared_tunnel.pid
 fi
 
-
 cat /config.yml
-exec registry serve /config.yml
+registry serve /config.yml &
+
+wait -n
+_shutdown 1

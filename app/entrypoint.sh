@@ -37,8 +37,20 @@ trap '_on_error $?' ERR
 
 harderdns test amazonaws.com
 
-# https://github.com/distribution/distribution/issues/2870
-export REGISTRY_STORAGE_S3_REGIONENDPOINT="s3.${REGION}.amazonaws.com"
+case "${STORAGE:-}" in
+  s3)
+    # https://github.com/distribution/distribution/issues/2870
+    export REGISTRY_STORAGE_S3_REGIONENDPOINT="s3.${AWS_REGION}.amazonaws.com"
+  ;;
+  gcs)
+    :
+  ;;
+  *)
+    echo "unknown STORAGE: '$STORAGE'"
+    sleep 3
+    exit 1
+  ;;
+esac
 
 # otherwise load balanced instances fail (says logs if this is not set)
 export REGISTRY_HTTP_SECRET=abbacdabbacdacdc
@@ -63,6 +75,14 @@ export REGISTRY_HTTP_SECRET=abbacdabbacdacdc
 ) 2>&1 | sed -le "s#^#cleanup: #;" &
 
 envsubst < /app/config.template.yml > /config.yml
+case "${STORAGE:-}" in
+  s3)
+    envsubst < /app/config.template.s3.yml >> /config.yml
+  ;;
+  gcs)
+    envsubst < /app/config.template.gcs.yml >> /config.yml
+  ;;
+esac
 
 if [[ "${CLOUDFLARED_ACCOUNT_TAG:-}" != "" ]]
 then

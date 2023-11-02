@@ -15,5 +15,6 @@ services:
       - .env
     volumes:
       - ./app:/app
-    # ports:
-    #   - 6000:5000
+      - ./keyfile.json:/keyfile.json
+    ports:
+      - 6000:5000

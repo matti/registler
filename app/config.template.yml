@@ -4,12 +4,14 @@ log:
     disabled: true # todo
   level: info
   formatter: text
+http:
+  addr: 0.0.0.0:5000
+  relativeurls: false # TODO: ??
+  draintimeout: 10s
+health:
+  storagedriver:
+    enabled: false
 storage:
-  s3:
-    accesskey: ${AWS_ACCESS_KEY_ID}
-    secretkey: ${AWS_SECRET_ACCESS_KEY}
-    region: ${REGION}
-    bucket: ${BUCKET}
   delete:
     enabled: true
   redirect:
@@ -22,10 +24,3 @@ storage:
       age: 1h
       interval: 1h # TODO
       dryrun: false
-http:
-  addr: 0.0.0.0:5000
-  relativeurls: false # TODO: ??
-  draintimeout: 10s
-health:
-  storagedriver:
-    enabled: false

@@ -1,0 +1,5 @@
+  gcs:
+    bucket: ${GCS_BUCKET}
+    keyfile: /keyfile.json
+    rootdirectory: ""
+    chunksize: 5242880

@@ -1,2 +1,2 @@
 .env
-cloudflared.pem
+keyfile.json

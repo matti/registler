@@ -64,6 +64,11 @@ export REGISTRY_HTTP_SECRET=abbacdabbacdacdc
 (
   regctl registry set --tls disabled 127.0.0.1:5000
 
+  if [[ "${REGISTLER_KEEP:--1}" == "-1" ]]; then
+    echo "REGISTLER_KEEP not set or set to -1, skipping cleanup"
+    exit 0
+  fi
+
   while true; do
     nc -z 127.0.0.1 5000 && break
     echo "waiting for 127.0.0.1:5000"

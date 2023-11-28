@@ -43,6 +43,12 @@ case "${STORAGE:-}" in
     export REGISTRY_STORAGE_S3_REGIONENDPOINT="s3.${AWS_REGION}.amazonaws.com"
   ;;
   gcs)
+    if [[ ! -f /keyfile.json ]]
+    then
+      echo "missing /keyfile.json"
+      sleep 3
+      exit 1
+    fi
     :
   ;;
   *)

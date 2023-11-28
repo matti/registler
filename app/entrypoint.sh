@@ -66,7 +66,7 @@ export REGISTRY_HTTP_SECRET=abbacdabbacdacdc
 
   if [[ "${REGISTLER_KEEP:--1}" == "-1" ]]; then
     echo "REGISTLER_KEEP not set or set to -1, skipping cleanup"
-    exit 0
+    tail -f /dev/null & wait
   fi
 
   while true; do

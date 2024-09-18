@@ -118,7 +118,9 @@ then
     exec cloudflared tunnel --no-autoupdate --metrics 0.0.0.0:9090 \
       run --url "http://127.0.0.1:5000" "$CLOUDFLARED_TUNNEL_ID"
   ) 2>&1 | sed -le "s#^#cloudflared tunnel: #;" &
-elif [[ "${CADDY_HOSTNAME:-}" != "" ]]
+fi
+
+if [[ "${CADDY_HOSTNAME:-}" != "" ]]
 then
   (
     exec caddy reverse-proxy --from="$CADDY_HOSTNAME" --to="127.0.0.1:5000"

@@ -22,6 +22,13 @@ RUN mkdir /ghjk && cd /ghjk \
   && mv cloudflared /usr/local/bin \
   && rm -rf /ghjk
 
+RUN set -eux ; \
+  mkdir /ghjk ; cd /ghjk ; \
+  [ "$(uname -m)" = "aarch64" ] && arch="arm64" || arch="amd64" ; \
+  curl -Lsfo caddy.tar.gz "https://github.com/caddyserver/caddy/releases/download/v2.8.4/caddy_2.8.4_linux_${arch}.tar.gz" ; \
+  tar -xzf caddy.tar.gz ; \
+  mv caddy /usr/local/bin
+
 WORKDIR /app
 COPY app .
 

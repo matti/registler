@@ -25,6 +25,12 @@ GCS_BUCKET=
 
 and  `/keyfile.json`
 
+## caddy https
+
+```.env
+CADDY_HOSTNAME=myregistery.example.com
+```
+
 ## cloudflared tunnel
 
 ```console

@@ -37,7 +37,11 @@ trap '_on_error $?' ERR
 
 harderdns test amazonaws.com
 
-case "${STORAGE:-}" in
+case "${STORAGE:-hang}" in
+  hang)
+    echo "hang"
+    tail -f /dev/null & wait
+  ;;
   s3)
     # https://github.com/distribution/distribution/issues/2870
     export REGISTRY_STORAGE_S3_REGIONENDPOINT="s3.${AWS_REGION}.amazonaws.com"
@@ -114,6 +118,11 @@ then
     exec cloudflared tunnel --no-autoupdate --metrics 0.0.0.0:9090 \
       run --url "http://127.0.0.1:5000" "$CLOUDFLARED_TUNNEL_ID"
   ) 2>&1 | sed -le "s#^#cloudflared tunnel: #;" &
+elif [[ "${CADDY_HOSTNAME:-}" != "" ]]
+then
+  (
+    exec caddy reverse-proxy --from="$CADDY_HOSTNAME" --to="127.0.0.1:5000"
+  ) 2>&1 | sed -le "s#^#caddy: #;" &
 fi
 
 cat /config.yml

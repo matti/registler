@@ -123,6 +123,11 @@ fi
 if [[ "${CADDY_ENABLED:-}" == "yes" ]]
 then
   (
+    caddy_sleep=${CADDY_DELAY:-0}
+    echo "sleeping for $caddy_sleep"
+    sleep "$caddy_sleep"
+
+    echo "starting caddy"
     exec caddy reverse-proxy --from="$CADDY_HOSTNAME" --to="127.0.0.1:5000"
   ) 2>&1 | sed -le "s#^#caddy: #;" &
 fi

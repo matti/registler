@@ -120,7 +120,7 @@ then
   ) 2>&1 | sed -le "s#^#cloudflared tunnel: #;" &
 fi
 
-if [[ "${CADDY_ENABLED:-}" != "yes" ]]
+if [[ "${CADDY_ENABLED:-}" == "yes" ]]
 then
   (
     exec caddy reverse-proxy --from="$CADDY_HOSTNAME" --to="127.0.0.1:5000"

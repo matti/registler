@@ -28,6 +28,7 @@ and  `/keyfile.json`
 ## caddy https
 
 ```.env
+CADDY_ENABLED=yes
 CADDY_HOSTNAME=myregistery.example.com
 ```
 

@@ -4,6 +4,8 @@ set -eEuo pipefail
 registry="${REGISTLER_REGISTRY:-127.0.0.1:5000}"
 repositories="${REGISTLER_REPOSITORIES:-}"
 keep="${REGISTLER_KEEP:-10}"
+dryrun="${REGISTLER_KEEP_DRYRUN:-no}"
+
 workingdir="/tmp/registler"
 
 function _err() {
@@ -69,7 +71,9 @@ while true; do
         continue
       fi
 
-      if ! regctl tag rm "$registry/$repository:$tag_to_delete"; then
+      if [[ "$dryrun" == "yes" ]]; then
+        echo "dryrun: would delete $registry/$repository:$tag_to_delete"
+      elif ! regctl tag rm "$registry/$repository:$tag_to_delete"; then
         _err "regctl tag rm $registry/$repository:$tag_to_delete"
         continue
       fi

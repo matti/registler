@@ -1,3 +1,2 @@
-  storage:
-    filesystem:
-      rootdirectory: /var/lib/registry
+  filesystem:
+    rootdirectory: /var/lib/registry

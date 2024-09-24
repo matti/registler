@@ -97,6 +97,9 @@ case "${STORAGE:-}" in
   gcs)
     envsubst < /app/config.template.gcs.yml >> /config.yml
   ;;
+  local)
+    envsubst < /app/config.template.local.yml >> /config.yml
+  ;;
 esac
 
 if [[ "${CLOUDFLARED_ACCOUNT_TAG:-}" != "" ]]

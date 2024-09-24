@@ -55,6 +55,9 @@ case "${STORAGE:-hang}" in
     fi
     :
   ;;
+  local)
+    :
+  ;;
   *)
     echo "unknown STORAGE: '$STORAGE'"
     sleep 3

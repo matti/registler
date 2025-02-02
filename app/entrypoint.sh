@@ -154,7 +154,8 @@ then
         echo "using s3 storage"
       ;;
       *)
-        exit
+        echo "not using storage"
+        exec tail -f /dev/null
       ;;
     esac
 

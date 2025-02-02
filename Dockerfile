@@ -18,7 +18,7 @@ RUN [ "$(uname -m)" = "aarch64" ] && arch=arm64 || arch=amd64 \
 
 RUN mkdir /ghjk && cd /ghjk \
   && [ "$(uname -m)" = "aarch64" ] && arch="arm64" || arch="amd64" \
-  && curl -Lfso "cloudflared" "https://github.com/cloudflare/cloudflared/releases/download/2023.10.0/cloudflared-linux-${arch}" \
+  && curl -Lfso "cloudflared" "https://github.com/cloudflare/cloudflared/releases/download/2025.1.1/cloudflared-linux-${arch}" \
   && chmod +x cloudflared \
   && mv cloudflared /usr/local/bin \
   && rm -rf /ghjk

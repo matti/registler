@@ -128,14 +128,54 @@ fi
 
 if [[ "${CADDY_ENABLED:-}" == "yes" ]]
 then
+  caddy_sleep=${CADDY_DELAY:-0}
+  echo "sleeping for $caddy_sleep"
+  sleep "$caddy_sleep"
+
   (
-    caddy_sleep=${CADDY_DELAY:-0}
-    echo "sleeping for $caddy_sleep"
-    sleep "$caddy_sleep"
+    case "${CADDY_STORAGE:-}" in
+      s3)
+        if aws s3 sync "s3://${AWS_S3_BUCKET}/caddy/" "$HOME/.local/share/caddy/"
+        then
+          echo "synced caddy storage"
+        else
+          echo "failed to sync caddy storage"
+        fi
+      ;;
+    esac
 
     echo "starting caddy"
     exec caddy reverse-proxy --from="$CADDY_HOSTNAME" --to="127.0.0.1:5000"
   ) 2>&1 | sed -le "s#^#caddy: #;" &
+
+  (
+    case "${CADDY_STORAGE:-}" in
+      s3)
+        echo "using s3 storage"
+      ;;
+      *)
+        exit
+      ;;
+    esac
+
+    echo "sleeping for 600"
+    sleep 600
+
+    while true; do
+      case "${CADDY_STORAGE:-}" in
+        s3)
+          if aws s3 sync "$HOME/.local/share/caddy/" "s3://${AWS_S3_BUCKET}/caddy/" --delete
+          then
+            echo "synced caddy storage"
+          else
+            echo "failed to sync caddy storage"
+          fi
+        ;;
+      esac
+
+      sleep 1800
+    done
+  ) 2>&1 | sed -le "s#^#caddy-storage: #;" &
 fi
 
 cat /config.yml

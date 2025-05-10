@@ -6,7 +6,8 @@ RUN apk add --no-cache \
   bash gettext \
   curl jq \
   libcap sed \
-  aws-cli
+  aws-cli \
+  apache2-utils
 
 COPY --from=mattipaksula/harderdns:sha-674b3ac /* /usr/local/bin
 RUN setcap CAP_NET_BIND_SERVICE=+eip /usr/local/bin/harderdns

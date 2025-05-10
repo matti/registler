@@ -25,6 +25,14 @@ GCS_BUCKET=
 
 and  `/keyfile.json`
 
+## auth
+
+```.env
+REGISTRY_AUTH=htpasswd
+REGISTLER_USERNAME=user
+REGISTLER_PASSWORD=pass
+```
+
 ## caddy https
 
 ```.env

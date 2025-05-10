@@ -68,6 +68,14 @@ esac
 # otherwise load balanced instances fail (says logs if this is not set)
 export REGISTRY_HTTP_SECRET=abbacdabbacdacdc
 
+case "${REGISTRY_AUTH:-}" in
+  "htpasswd")
+    export REGISTRY_AUTH_HTPASSWD_REALM="Registry Realm"
+    export REGISTRY_AUTH_HTPASSWD_PATH="/tmp/htpasswd"
+    htpasswd -Bbn "$REGISTLER_USERNAME" "$REGISTLER_PASSWORD" > /tmp/htpasswd
+  ;;
+esac
+
 (
   regctl registry set --tls disabled 127.0.0.1:5000
 
